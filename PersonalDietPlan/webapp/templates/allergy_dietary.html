@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Allergies & Dietary Preferences{% endblock %}
+
+{% block content %}
+<h2>Select Your Allergies & Dietary Preferences</h2>
+
+<form method="POST">
+    {% csrf_token %}
+    <fieldset>
+        <legend>Allergies</legend>
+        {{ form.allergy }}
+    </fieldset>
+
+    <fieldset>
+        <legend>Dietary Requirements</legend>
+        {{ form.dietary_requirement }}
+    </fieldset>
+
+    <button type="submit" class="btn btn-primary">Next: Health Goals</button>
+</form>
+
+{% endblock %}
