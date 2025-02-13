@@ -16,16 +16,20 @@
     <div class="header">
         <h1><a href="{% url 'home'%}">Personal Diet Plan</a></h1>
         <ul class="navbar-nav ms-auto flex-row">
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'liked_foods' %}">Liked Foods</a>
-            </li>
+
             {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link login-btn" href="{% url 'logout' %}">Logout ({{ user.username }})</a>
+                    <form action="{% url 'logout' %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn login-btn">Logout</button>
+                    </form>                    
                 </li>
             {% else %}
                 <li class="nav-item">
                     <a class="nav-link login-btn" href="{% url 'login' %}">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'sign_up' %}">Sign Up</a>
                 </li>
             {% endif %}
         </ul>
