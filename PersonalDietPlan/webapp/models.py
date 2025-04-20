@@ -13,13 +13,21 @@ class Cuisine(models.Model):
     def __str__(self):
         return self.name
 
+class FlavorProfile(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+class TextureProfile(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+
 class Food(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    food_type = models.ForeignKey(FoodCategory, on_delete=models.SET_NULL, null=True, blank=True)
+    food_types = models.ManyToManyField(FoodCategory, blank=True)
     cuisine = models.ForeignKey(Cuisine, on_delete=models.SET_NULL, null=True, blank=True)
+    flavor_profile = models.ManyToManyField(FlavorProfile, blank=True);
+    texture_profile = models.ManyToManyField(TextureProfile, blank=True);
 
     def __str__(self):
         return self.name
+
 class Allergy(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
