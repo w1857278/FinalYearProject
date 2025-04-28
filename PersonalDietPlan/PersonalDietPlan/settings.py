@@ -39,8 +39,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_q',
     'webapp',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -125,3 +127,15 @@ TEMPLATES = [
         },
     },
 ]
+
+Q_CLUSTER = {
+    'name': 'PDP',
+    'serializer': 'json',
+    'workers': 4,
+    'recycle': 500,
+    'timeout': 60,
+    'retry': 90,
+    'queue_limit': 50,
+    'bulk': 10,
+    'orm': 'default'
+}

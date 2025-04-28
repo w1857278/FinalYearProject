@@ -52,7 +52,7 @@ class HealthGoals(models.Model):
 
 
 class UserFoodSelection(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     liked_foods = models.ManyToManyField(Food, blank=True, related_name="liked_by_users")
     disliked_foods = models.ManyToManyField(Food, blank=True, related_name="disliked_by_users")
     allergy = models.ManyToManyField(Allergy, blank=True, related_name="user_allergy")
@@ -60,3 +60,15 @@ class UserFoodSelection(models.Model):
     health_goals = models.ManyToManyField(HealthGoals, blank=True, related_name="user_health_goal")
     def __str__(self):
         return f"{self.user.username}'s Food Preferences"
+
+class Prompt(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    prompt = models.TextField()
+
+class GeneratedRecipe(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    content = models.TextField(blank=True, null=True)  # Recipe content, initially empty
+    status = models.CharField(max_length=50, default="Processing")  # Track the status (Processing, Completed)
+
+    def __str__(self):
+        return f"{self.user.username}'s Recipe"

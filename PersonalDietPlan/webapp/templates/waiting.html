@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Waiting{% endblock %}
+
+{% block content %}
+<h2>Your Recipe is being generated</h2>
+<p>This may take some time, please wait.</p>
+<h2 id="status-message">Waiting for your meal plan...</h2>
+<script>
+    function checkStatus() {
+        fetch("{% url 'check_status' %}")
+          .then(response => response.json())
+          .then(data => {
+            if (data.status === "Completed") {
+              window.location.href = "{% url 'response' %}";
+            } else if (data.status === "Failed") {
+              document.getElementById("status-message").innerText = "Something went wrong!";
+            } else {
+              document.getElementById("status-message").innerText = "Status: " + data.status;
+              setTimeout(checkStatus, 3000);
+            }
+          });
+      }
+      
+      checkStatus();
+  </script>
+
+
+{% endblock %}

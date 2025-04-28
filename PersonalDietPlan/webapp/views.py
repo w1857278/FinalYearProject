@@ -2,12 +2,33 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
+from django_q.tasks import async_task
+from django.http import JsonResponse
 
 
 from .models import *
+from .services import *
+from .tasks import *
+
 
 def home(request):
     return render(request, 'home.html')
+
+@login_required
+def check_recipe_status(request):
+    try:
+        recipe = GeneratedRecipe.objects.get(user=request.user)
+        return JsonResponse({'status': recipe.status})
+    except GeneratedRecipe.DoesNotExist:
+        return JsonResponse({'status': 'Not Found'})
+
+@login_required
+def waiting(request):
+    return render(request, 'waiting.html')
+
+def response(request):
+    recipe = GeneratedRecipe.objects.get(user=request.user)
+    return render(request, 'response.html', {'recipe': recipe})
 
 @login_required
 def liked_foods(request):
@@ -20,7 +41,7 @@ def liked_foods(request):
     cuisine = request.GET.get("filter_cuisine")
 
     if food_type:
-        foods = foods.filter(food_type__name=food_type)
+        foods = foods.filter(food_types__name=food_type)
     if cuisine:
         foods = foods.filter(cuisine__name=cuisine)
 
@@ -89,12 +110,25 @@ def health_goals(request):
         form = HealthGoalsForm(request.POST, instance=user_food_selection)
         if form.is_valid():
             user_food_selection.user = request.user
-            form.save()  
-            return redirect('home')
+            form.save()
+
+            # Create or reset a GeneratedRecipe entry
+            recipe, created = GeneratedRecipe.objects.get_or_create(user=request.user)
+            recipe.status = 'Pending'
+            recipe.content = ''
+            recipe.save()
+
+            # Start the generation task
+            print("Queuing task:", "webapp.tasks.generate_prompt_task")
+            async_task('webapp.tasks.generate_prompt_task', request.user.id)
+
+
+            return redirect('waiting')
     else:
         form = HealthGoalsForm(instance=user_food_selection)
 
     return render(request, 'health_goals.html', {'form': form})
+
 
 def sign_up(request):
     if request.method == "POST":
