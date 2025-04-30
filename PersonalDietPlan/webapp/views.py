@@ -111,7 +111,7 @@ def health_goals(request):
             user_food_selection.user = request.user
             form.save()
 
-            recipe = GeneratedRecipe.objects.get_or_create(user=request.user)
+            recipe, created = GeneratedRecipe.objects.get_or_create(user=request.user)
             recipe.status = 'Pending'
             recipe.content = ''
             recipe.save()
