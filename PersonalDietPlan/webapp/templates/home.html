@@ -4,8 +4,8 @@
 
 {% block content %}
     <h2>Welcome to Personal Diet Plan</h2>
-    <p>Personal Diet Plan is an Machine Learning based curator of recipes designed to give you the food you want, while keeping you healthy!</p>
-    <p>Unline many other Machine Learning models, we use a questionairre that takes all of your preferances and requirements into account in order to give you a curated list of recipes that are both tasty and healthy!</p>
+    <p>Personal Diet Plan is a Machine Learning based curator of recipes designed to give you the food you want, while keeping you healthy!</p>
+    <p>Unline many other Machine Learning models, we use a questionaire that takes all of your preferances and requirements into account in order to give you a curated list of recipes that are both tasty and healthy!</p>
     <p><a href="{% url 'liked_foods' %}">Get started</a></p>
 
     {% if user.is_authenticated %}

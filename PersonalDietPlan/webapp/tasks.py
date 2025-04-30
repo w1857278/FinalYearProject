@@ -8,7 +8,6 @@ def generate_prompt_task(user_id):
     recipe = GeneratedRecipe.objects.get(user=user)
 
     prompt = generate_prompt(user_selection)
-    print(prompt)
     try:
         recipe.status = 'Generating'
         recipe.save()
@@ -16,7 +15,6 @@ def generate_prompt_task(user_id):
         response = query_ollama(prompt)
         cleaned_response = clean_response(response)
         recipe.content = cleaned_response
-        recipe.content = response
         recipe.status = 'Completed'
         recipe.save()
 

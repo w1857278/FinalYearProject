@@ -7,7 +7,7 @@
 
 <!-- Filter by Food Type -->
 <h4>Filter by Food Type:</h4>
-<div class="btn-group mb-3">
+<div class="d-flex flex-wrap btn-group mb-3">
     {% for category in categories %}
         <a href="?filter_type={{ category.name }}" class="btn btn-outline-primary">{{ category.name }}</a>
     {% endfor %}
@@ -15,7 +15,7 @@
 
 <!-- Filter by Cuisine -->
 <h4>Filter by Cuisine:</h4>
-<div class="btn-group mb-3">
+<div class="d-flex flex-wrap btn-group mb-3">
     {% for cuisine in cuisines %}
         <a href="?filter_cuisine={{ cuisine.name }}" class="btn btn-outline-secondary">{{ cuisine.name }}</a>
     {% endfor %}

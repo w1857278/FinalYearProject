@@ -11,7 +11,7 @@ def clean_response(response):
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
-def query_ollama(prompt, model="deepseek-r1:14b"):
+def query_ollama(prompt, model="deepseek-r1:1.5b"):
     payload = {
         "model": model,
         "prompt": prompt,
@@ -79,7 +79,7 @@ def generate_prompt(user_selection):
     Health Goals: {goals}.
 
     Liked Flavours: {liked_flavors_summary}.
-    Diskliked Flavours: {disliked_flavors_summary}.
+    Disliked Flavours: {disliked_flavors_summary}.
 
     Liked Textures: {liked_textures_summary}.
     Disliked Textures: {disliked_textures_summary}.

@@ -4,6 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django_q.tasks import async_task
 from django.http import JsonResponse
+from .forms import *
+
 
 
 from .models import *
@@ -84,9 +86,6 @@ def disliked_foods(request):
         "cuisines": cuisines
     })
 
-from django.shortcuts import render, redirect
-from .forms import AllergyDietaryForm, HealthGoalsForm
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def allergy_dietary(request):
@@ -112,13 +111,11 @@ def health_goals(request):
             user_food_selection.user = request.user
             form.save()
 
-            # Create or reset a GeneratedRecipe entry
-            recipe, created = GeneratedRecipe.objects.get_or_create(user=request.user)
+            recipe = GeneratedRecipe.objects.get_or_create(user=request.user)
             recipe.status = 'Pending'
             recipe.content = ''
             recipe.save()
 
-            # Start the generation task
             print("Queuing task:", "webapp.tasks.generate_prompt_task")
             async_task('webapp.tasks.generate_prompt_task', request.user.id)
 
